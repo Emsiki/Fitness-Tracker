@@ -4,7 +4,7 @@ from functions import current
 def main():
     dateInput = input("Please enter the current data in MM-DD-YYYY format: ")
 
-    currentDate = current(dateInput)
+    month, day, year = current(dateInput)
     
 
     
