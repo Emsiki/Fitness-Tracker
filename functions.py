@@ -3,7 +3,8 @@
 
 
 #Returns the data as a set of 3 integers
-def manualDate(currentDate):
+def manualDate():
+    currentDate = input("What is the currnet date in MM/DD/YYYY format?: ")
     month = ""
     day = ""
     year = ""
@@ -25,8 +26,8 @@ def manualDate(currentDate):
     return int(month), int(day), int(year)
 
 #Returns the data as a set of 3 integers
-def manualTime(currentTime):
-    print("Please enter time in the format H:MM")
+def manualTime():
+    currentTime = input("Please enter time in the format H:MM")
     hour = ""
     minute = ""
     storage = ""
@@ -47,14 +48,14 @@ def manualTime(currentTime):
 
 
 #Returns the players menu navigation choice in the form of a capital character 
-#Possible outputs include E, T, V, S
-#More can be added simply, just edit the for loop and the first print statement
+#Possible outputs include E, T, V, S, M
+#More can be added simply, just edit the while loops conditional to include more inputs and the first print statement to include more inputs
 def choice():
 
-    print("Please choose one of the following actions:\n(E)nter your data for today\n(T)alk to a virtual assistant\n(S)ubmit your general statistics\n(V)iew graphics based on past data")
+    print("Please choose one of the following actions:\n(E)nter your data for today\n(T)alk to a virtual assistant\n(S)ubmit your general statistics\n(V)iew graphics based on past data\n(M)anually change the time")
     answer = input().upper()
 
-    while answer not in "ETSV":
+    while answer not in "ETSVM":
         print("That is not a valid choice, Please choose one of the following actions:\n(E)nter your data for today\n(T)alk to a virtual assistant\n(S)ubmit your general statistics\n(V)iew graphics based on past data")
         answer = input().upper()
 
@@ -62,6 +63,31 @@ def choice():
 
 
 
-print("please input the current time")
-currentTime = input()
-print(manualTime(currentTime))
+def enterWorkoutData():
+    
+    print("First, before I'm able to save your workout data, I need to know a few things, please answer these following questions")
+
+    
+
+
+    workout = open("collectedData.txt", "a")
+    workout.write("nerd")
+
+
+
+    pass
+
+
+def talkToAssistant():
+    pass
+
+
+def submitGeneralStats():
+    pass
+
+
+def viewGraphics():
+    pass
+
+
+
