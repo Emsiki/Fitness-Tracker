@@ -1,7 +1,6 @@
 #This file simply has all of the custom functions that I will be using 
 
 
-
 #Returns the data as a set of 3 integers
 def manualDate():
     currentDate = input("What is the currnet date in MM/DD/YYYY format?: ")
@@ -51,17 +50,10 @@ def manualTime():
 #Possible outputs include E, T, V, S, M
 #More can be added simply, just edit the while loops conditional to include more inputs and the first print statement to include more inputs
 def choice():
-
-    print("Please choose one of the following actions:\n(E)nter your data for today\n(T)alk to a virtual assistant\n(S)ubmit your general statistics in the form of maxes\n(V)iew graphics based on past data\n(M)anually change the time\n(H)ard reset")
-    answer = input().upper()
-
-    while answer not in "ETSVMH":
-        print("That is not a valid choice, Please choose one of the following actions:\n(E)nter your data for today\n(T)alk to a virtual assistant\n(S)ubmit your general statistics\n(V)iew graphics based on past data\n(M)anually change the time\n(H)ard reset")
-        answer = input().upper()
+    
+    answer = prompt("Please choose one of the following actions:\n(E)nter your data for today\n(T)alk to a virtual assistant\n(S)ubmit your general statistics in the form of maxes\n(V)iew graphics based on past data\n(M)anually change the time\n(H)ard reset\n(R)ank:\n", "ETSVMHR", False)
 
     return answer
-
-
 
 def enterWorkoutData():
     
@@ -72,37 +64,44 @@ def enterWorkoutData():
 
         print("Since this is your first time entering data, before I'm able to save your workout data, I need to know a few things, please answer these following questions")
         
-        regOrCustom = input("Since this is your time enterting data, Would you like to make a custom workout routine, or choose from one of the many predefined workouts? (Y or N): ")
+        regOrCustom = prompt("Would you like to make a custom workout routine, or choose from one of the many predefined workouts? (Y or N): ", "YN", False)
         
         happendBefore = open("happendBefore.txt", "a")
         happendBefore.write("True")
 
-        while regOrCustom.upper() not in "YN":
-            regOrCustom = input("That is not a correct response, please enter 'Y' or 'N': ")
 
-
-        if regOrCustom.upper() == "N":
-            #here I would give help them genorate an instace of the "Workout" Class
+        if regOrCustom == "N":
+            #here I would give help them generate an instace of the "Workout" Class
             pass
 
-        elif regOrCustom.upper() == "Y":
-            #here I would give help them genorate an instance of the "CustomWorkout" Class
+        elif regOrCustom == "Y":
+            #here I would give help them generate an instance of the "CustomWorkout" Class
             pass
         workout = open("collectedData.txt", "a")
 
     elif happendBefore:
 
-        continue_ = input("Would you like to continue with your current workout routine? (Y or N): ")
 
-        while continue_.upper() not in "YN":
-            continue_ = input("That is not a propper response, please enter a response in the format (Y or N)")
 
-        if continue_.upper() == "Y":
+        continue_ = prompt("Would you like to continue with your current workout routine? (Y or N): ", "YN", False)
+        
 
+        if continue_ == "Y":
+
+            
             workout = open("collectedData.txt", "a")
+
         
         else:
-            pass
+            regOrCustom = prompt("Would you like to make a custom workout routine, or choose from one of the many predefined workouts? (Y or N): ", "YN", False)
+
+            if regOrCustom == "N":
+            #here I would give help them generate an instace of the "Workout" Class
+                pass
+
+            elif regOrCustom == "Y":
+                choicesToGenerateCustom()
+                pass
 
 
 def talkToAssistant():
@@ -134,8 +133,50 @@ def rank():
     
 # Below are functions that are going to be used in this file and not any others:
 
-def repromt():
-    pass
+def prompt(inputs, preferedInput, intr):
+    checked = False
+    inp = input(inputs)
+    if not intr:
+
+        while inp.upper() not in preferedInput:
+                print("First")
+                inp = input("Sorry, that is not a proper response, " + inputs)
+
+#This intr section is strictly for number / string, inputs, while the top is for char 
+
+
+### This shit not working
+    if intr == "Int":
+        inp = inp.upper()
+
+        
+        for num in inp:
+            while num.upper() in 'ABCDEFGHIJKLMNOPQRSTUVQXYZ-=_+/.,<>?;:':
+                inp = input("Sorry, that is not a proper response, " + inputs)
+
+                
+                
+                    
+                    
+                
+            
+### This shit not working
+    elif intr == "String":
+         while not checked:
+            for num in inp:
+                while num.upper() in '1234567890-=_+/.,<>?;:':
+                    inp = input("Sorry, that is not a proper response, " + inputs)
+                    
+
+            checked = True
+
+
+
+
+    return inp.upper()
+
+    
+    
 
 
 
@@ -147,15 +188,17 @@ def choicesToGenerateCustom():
         for num in numExer:
             if num not in "1234567890":
                 numExer = input("That is not a valid response, How many exercies are actually in your workout?: ")
+                continue
             
-            else:
-                checked = True
+            
+        
+            checked = True
         
             
     for i in range(int(numExer)):
-        workoutName = input(f"What is the name of the workout #{i + 1}?: ")
-        workoutTime = input("How much time does this exersice take (In seconds)?: ")
-        workoutRestAfter = input("How long do you rest for after this workout?")
+        workoutName = prompt(f"What is the name of the workout #{i + 1}?: ", "", "String")
+        workoutTime = prompt("How much time does this exersice take (In seconds)?: ", "", "Int")
+        workoutRestAfter = prompt("How long do you rest for after this workout? (In seconds)?: ", "", "Int")
         
 
 
