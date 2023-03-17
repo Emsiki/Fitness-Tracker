@@ -1,3 +1,4 @@
+
 import time as t
 import functions
 
@@ -16,6 +17,10 @@ def main():
         functions.talkToAssistant()
     elif choice == "S":
         functions.submitGeneralStats()
+    elif choice == "H":
+        functions.hardReset()
+    elif choice == "R":
+        functions.rank()
 
 if __name__=="__main__":
     main()

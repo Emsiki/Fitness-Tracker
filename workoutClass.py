@@ -5,13 +5,19 @@
 
 class Workout:
 
-    def __init__(self, exersices, archType, ):
+    def __init__(self, info):
+        self.info = info
 
-        self.exersices = exersices
+        
+
+        
+        
+
 
 
 
 class CustomWorkout(Workout):
 
-    def __init__(self, )
+    def __init__(self, ):
+        pass
 
