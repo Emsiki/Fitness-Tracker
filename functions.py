@@ -1,3 +1,4 @@
+from exerciseClass import Exersice, Workout, Cycle
 #This file simply has all of the custom functions that I will be using 
 
 
@@ -64,19 +65,22 @@ def enterWorkoutData():
 
         print("Since this is your first time entering data, before I'm able to save your workout data, I need to know a few things, please answer these following questions")
         
-        regOrCustom = prompt("Would you like to make a custom workout routine, or choose from one of the many predefined workouts? (Y or N): ", "YN", False)
+        regOrCustom = prompt("Would you like to make a custom workout routine, or choose from one of the many predefined workouts? (C or P): ", "CP", False)
         
         happendBefore = open("happendBefore.txt", "a")
         happendBefore.write("True")
 
+        choicesToGenerateCustom()
 
-        if regOrCustom == "N":
+
+        if regOrCustom == "R":
             #here I would give help them generate an instace of the "Workout" Class
             pass
 
-        elif regOrCustom == "Y":
-            #here I would give help them generate an instance of the "CustomWorkout" Class
-            pass
+        elif regOrCustom == "C":
+            choicesToGenerateCustom()
+            
+
         workout = open("collectedData.txt", "a")
 
     elif happendBefore:
@@ -93,13 +97,13 @@ def enterWorkoutData():
 
         
         else:
-            regOrCustom = prompt("Would you like to make a custom workout routine, or choose from one of the many predefined workouts? (Y or N): ", "YN", False)
+            regOrCustom = prompt("Would you like to make a custom workout routine, or choose from one of the many predefined workouts? (C or P): ", "CP", False)
 
-            if regOrCustom == "N":
+            if regOrCustom == "C":
             #here I would give help them generate an instace of the "Workout" Class
                 pass
 
-            elif regOrCustom == "Y":
+            elif regOrCustom == "P":
                 choicesToGenerateCustom()
                 pass
 
@@ -129,22 +133,32 @@ def rank():
     pass
 
 
+#The prompt function has 3 arguments
+#The inputs argument will be used to ask the user for their input and print out the input listed
+#the preferedInputs argument is if the user wants to list preferedInputs but strictly for characters
+#The intr argument is for testing if the users input is a string or an integer
+#for the intr argument Int or String, should be used, or False if entering a preferedInput
+#Function will not work if both intr and preferedInputs arguments are filled out
+#if using intr argument preferedInputs should be set to ""
 
-    
-# Below are functions that are going to be used in this file and not any others:
-
-def prompt(inputs, preferedInput, intr):
+def prompt(inputs, preferedInputs, intr):
     checked = False
+    trigger = False
+    ticker = 0
     inp = input(inputs)
     inp = inp.upper()
-    if preferedInput:
+    prompts = []
+    if preferedInputs:
 
        while not checked:
             for num in inp: 
-                if num not in preferedInput:
-                    print("Sorry, that is not a proper response")
-                    prompt(inputs, preferedInput, False)
-                    return
+                if num not in preferedInputs:
+                    if ticker == 0:
+                        print("Sorry, that is not a proper response")
+                        prompts.append(prompt(inputs, preferedInputs, False))
+                        trigger = True
+                        ticker += 1
+
                     
             checked = True
 
@@ -155,9 +169,13 @@ def prompt(inputs, preferedInput, intr):
         while not checked:
             for num in inp: 
                 if num in 'ABCDEFGHIJKLMNOPQRSTUVQXYZ-=_+/.,<>?;:':
-                    print("Sorry, that is not a proper response")
-                    prompt(inputs, "", "Int")
-                    return
+                    if ticker == 0:
+                        print("Sorry, that is not a proper response")
+                    
+                        prompts.append(prompt(inputs, "", "Int"))
+                        trigger = True
+                        ticker += 1
+                    
                     
             checked = True
             
@@ -167,42 +185,67 @@ def prompt(inputs, preferedInput, intr):
          
         while not checked:
             for num in inp: 
-                print(num)
                 if num in '1234567890-=_+/.,<>?;:':
-                    print("Sorry, that is not a proper response")
-                    prompt(inputs, "", "String")
-                    return
+                    if ticker == 0:
+
+                        print("Sorry, that is not a proper response")
+                        prompts.append(prompt(inputs, "", "String"))
+                        trigger = True
+                        ticker += 1
                     
+   
             checked = True
 
 
-    print(inp)
-    return inp
+    if trigger:
+        return prompts[-1]
+    else:
+        return inp
 
     
     
 
 
 def choicesToGenerateCustom():
-    numExer = input("How many exercies are in your workout?: ")
-    checked = False
+    dayCount = prompt("How many days are in your workout cycle? (for ex. if you are doing push pull legs, you would have push day, pull day, leg day, and then a rest day until the cycle repeats itself): ", "", "Int")
+    diffNum = prompt("Are the number of exercises in each day different? (Y or N): ", "YN", False)
+    Workout = []
+    Cycle = []
+    if diffNum == "Y":
+        for day in range(int(dayCount)):
+            restDay = prompt(f"Is day #{day + 1} your rest day? (Y or N): ", "YN", False)
+            if restDay == "N":
+                numExer = prompt(f"How many exercises are in day #{day + 1} of your cycle?: ", "", "Int")
+                for i in range(int(dayCount)):
+                    dayName = prompt(f"What is the name of day #{i + 1}?: ", "", "String")      
+                    for j in range(int(numExer)):
+                        exerciseName = prompt(f"What is the name of workout #{j + 1} on {dayName} day: ", "", "String")
+                        exerciseTime = prompt("How much time does this exersice take (In seconds)?: ", "", "Int")
+                        exerciseRestAfter = prompt("How long do you rest for after this workout? (In seconds)?: ", "", "Int")
+                        Workout.append(Exersice(exerciseName, exerciseTime, exerciseRestAfter))
 
-    while not checked:
-        for num in numExer:
-            if num not in "1234567890":
-                numExer = input("That is not a valid response, How many exercies are actually in your workout?: ")
-                continue
-            
-            
-        
-            checked = True
-        
-            
-    for i in range(int(numExer)):
-        workoutName = prompt(f"What is the name of the workout #{i + 1}?: ", "", "String")
-        workoutTime = prompt("How much time does this exersice take (In seconds)?: ", "", "Int")
-        workoutRestAfter = prompt("How long do you rest for after this workout? (In seconds)?: ", "", "Int")
-        
+                Cycle.append(Workout)
+                Workout = []
+
+
+
+            else:   
+                Cycle.append("RestDay")
+
+    else:    
+        numExer = prompt("How many exercises are in there in each day of your cycle?", "", "Int")
+        for i in range(int(dayCount)):
+            dayName = prompt(f"What is the name of day #{i + 1}?: ", "", "String")      
+            for j in range(int(numExer)):
+                exerciseName = prompt(f"What is the name of workout #{j + 1} on {dayName} day: ", "", "String")
+                exerciseTime = prompt("How much time does this exersice take (In seconds)?: ", "", "Int")
+                exerciseRestAfter = prompt("How long do you rest for after this workout? (In seconds)?: ", "", "Int")
+                Workout.append(Exersice(exerciseName, exerciseTime, exerciseRestAfter))
+
+            Cycle.append(Workout)
+            Workout = []
+    
+    return Cycle
 
 
 def choicesToGenerateReg():
