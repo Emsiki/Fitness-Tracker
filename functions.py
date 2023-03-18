@@ -136,48 +136,51 @@ def rank():
 def prompt(inputs, preferedInput, intr):
     checked = False
     inp = input(inputs)
-    if not intr:
+    inp = inp.upper()
+    if preferedInput:
 
-        while inp.upper() not in preferedInput:
-                print("First")
-                inp = input("Sorry, that is not a proper response, " + inputs)
-
-#This intr section is strictly for number / string, inputs, while the top is for char 
-
-
-### This shit not working
-    if intr == "Int":
-        inp = inp.upper()
-
-        
-        for num in inp:
-            while num.upper() in 'ABCDEFGHIJKLMNOPQRSTUVQXYZ-=_+/.,<>?;:':
-                inp = input("Sorry, that is not a proper response, " + inputs)
-
-                
-                
+       while not checked:
+            for num in inp: 
+                if num not in preferedInput:
+                    print("Sorry, that is not a proper response")
+                    prompt(inputs, preferedInput, False)
+                    return
                     
+            checked = True
+
+#This intr section is strictly for number / string, inputs, while the top is for char with 1 character prefered inputs for navigations
+
+    elif intr == "Int":
+       
+        while not checked:
+            for num in inp: 
+                if num in 'ABCDEFGHIJKLMNOPQRSTUVQXYZ-=_+/.,<>?;:':
+                    print("Sorry, that is not a proper response")
+                    prompt(inputs, "", "Int")
+                    return
                     
-                
+            checked = True
             
-### This shit not working
+    
+                
     elif intr == "String":
-         while not checked:
-            for num in inp:
-                while num.upper() in '1234567890-=_+/.,<>?;:':
-                    inp = input("Sorry, that is not a proper response, " + inputs)
+         
+        while not checked:
+            for num in inp: 
+                print(num)
+                if num in '1234567890-=_+/.,<>?;:':
+                    print("Sorry, that is not a proper response")
+                    prompt(inputs, "", "String")
+                    return
                     
-
             checked = True
 
 
-
-
-    return inp.upper()
+    print(inp)
+    return inp
 
     
     
-
 
 
 def choicesToGenerateCustom():
