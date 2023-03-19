@@ -1,4 +1,5 @@
 import exerciseClass 
+import json
 #This file simply has all of the custom functions that I will be using 
 
 
@@ -58,7 +59,7 @@ def choice():
 
 def enterWorkoutData():
     
-    happendBefore = open("happendBefore.txt", "a")
+    
     happendBefore = open("happendBefore.txt", "r")
 
     if happendBefore.read() == "":
@@ -70,20 +71,27 @@ def enterWorkoutData():
         happendBefore = open("happendBefore.txt", "a")
         happendBefore.write("True")
 
-        choicesToGenerateCustom()
+        
 
 
         if regOrCustom == "R":
-            #here I would give help them generate an instace of the "Workout" Class
+            
             pass
 
         elif regOrCustom == "C":
-            choicesToGenerateCustom()
             
+            
+            workout = open("collectedData.txt", "a")
+            #makes a custom workout, converts it to JSON and saves it
+            workout.write(f"{json.dumps(choicesToGenerateCustom())}")
 
-        workout = open("collectedData.txt", "a")
+            workout = open("collectedData.txt", "r")
+            print(type(json.loads(workout.read())))
 
-    elif happendBefore:
+
+      
+
+    else:
 
 
 
@@ -93,14 +101,16 @@ def enterWorkoutData():
         if continue_ == "Y":
 
             
-            workout = open("collectedData.txt", "a")
+            workout = open("collectedData.txt", "r")
+            cycle = json.loads(workout.read())
 
         
         else:
             regOrCustom = prompt("Would you like to make a custom workout routine, or choose from one of the many predefined workouts? (C or P): ", "CP", False)
 
             if regOrCustom == "C":
-                choicesToGenerateCustom()
+                workout = open("collectedData.txt", "w")
+                workout.write(f"{json.dumps(choicesToGenerateCustom())}")
                 
 
             elif regOrCustom == "P":
@@ -201,8 +211,7 @@ def prompt(inputs, preferedInputs, intr):
         return prompts[-1]
     else:
         return inp
-
-    
+ 
     
 
 
@@ -212,7 +221,6 @@ def choicesToGenerateCustom():
     Exersice1 = []
     Workout = []
     Cycle = []
-    WorkoutTemp = []
     if diffNum == "Y":
         for day in range(int(dayCount)):
             restDay = prompt(f"Is day #{day + 1} a rest day? (Y or N): ", "YN", False)
@@ -225,20 +233,15 @@ def choicesToGenerateCustom():
                     exerciseSets = prompt(f"How many sets do you do of {exerciseName}?: ", "", "Int")
                     exerciseTime = prompt("How much time does each set of this exersice take not including rest time (In seconds) ?: ", "", "Int")
                     exerciseRestAfter = prompt("How long do you rest for after each set of this workout? (In seconds)?: ", "", "Int")
-                    Exersice1.append(exerciseClass.Exersice(exerciseName, exerciseSets, exerciseTime, exerciseRestAfter))
-                    WorkoutTemp.append([exerciseName, exerciseSets, exerciseTime, exerciseRestAfter])
+                    #Exersice1.append(exerciseClass.Exersice(exerciseName, exerciseSets, exerciseTime, exerciseRestAfter))
+                    Exersice1.append([exerciseName, exerciseSets, exerciseTime, exerciseRestAfter])
                         
-                Workout.append(Workout)
+                Cycle.append(Exersice1)
                 Exersice1 = []
 
             else:   
                 Cycle.append("RestDay")
-                WorkoutTemp.append("RestDay")
-            
-
-
-            Cycle.append(Workout)
-            Workout = []
+                          
 
     else:    
         numExer = prompt("How many exercises are in there in each day of your cycle?: ", "", "Int")
@@ -251,27 +254,26 @@ def choicesToGenerateCustom():
                     exerciseSets = prompt(f"How many sets do you do of {exerciseName}?: ", "", "Int")
                     exerciseTime = prompt("How much time does each set of this exersice take not including rest time (In seconds)?: ", "", "Int")
                     exerciseRestAfter = prompt("How long do you rest for after each set of this workout? (In seconds)?: ", "", "Int")
-                    Exersice1.append(exerciseClass.Exersice(exerciseName, exerciseSets, exerciseTime, exerciseRestAfter))
-                    WorkoutTemp.append([exerciseName, exerciseSets, exerciseTime, exerciseRestAfter])
-
-                Workout.append(Workout)
+                    #Exersice1.append(exerciseClass.Exersice(exerciseName, exerciseSets, exerciseTime, exerciseRestAfter))
+                    Exersice1.append([exerciseName, exerciseSets, exerciseTime, exerciseRestAfter])
+                    
+                Cycle.append(Exersice1)
                 Exersice1 = []
                 
             else:
                 Cycle.append("RestDay")
-                WorkoutTemp.append("RestDay")
             
-            Cycle.append(Workout)
-            Workout = []
+            
     
 
-#Example output of how it looks without making objects:
-#['RestDay', ['CHEST FLY', '3', '60', '60'], ['BENCH', '4', '45', '120'], ['TRI PULL DOWN', '4', '35', '100'], 
-# 'RestDay', ['LEG EXTENSIONS', '3', '120', '240'], ['LEG CURLS', '3', '140', '30'], ['CALF RAISES', '2', '45', '10']]
-    
+#Example output
+#[[<exerciseClass.Exersice object at 0x00000139402D78E0>, <exerciseClass.Exersice object at 0x000001394036E5B0>, 
+# <exerciseClass.Exersice object at 0x000001394036E670>, <exerciseClass.Exersice object at 0x000001394036EC40>], 
+# 'RestDay', [<exerciseClass.Exersice object at 0x000001394036ED60>, <exerciseClass.Exersice object at 0x00000139404CF280>, 
+# <exerciseClass.Exersice object at 0x00000139404CF2E0>, <exerciseClass.Exersice object at 0x00000139404CF250>], 
+# [<exerciseClass.Exersice object at 0x000001394047BB20>, <exerciseClass.Exersice object at 0x000001394047B0A0>, 
+# <exerciseClass.Exersice object at 0x000001394047B130>, <exerciseClass.Exersice object at 0x000001394047B160>]]
 
-
-    print(Cycle)
     return Cycle
 
 
