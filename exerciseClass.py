@@ -3,10 +3,10 @@
 #Which can allow you to create your own custom workouts
 class Cycle:
     
-    def __init__(self, name, length):
+    def __init__(self, name, length, workouts):
         self.name = name
         self.length = length
-
+        self.workouts = workouts
 
 class Workout:
 
@@ -17,11 +17,11 @@ class Workout:
 
 class Exersice:
 
-    def __init__(self, name, time, restAfter):
+    def __init__(self, name, sets, time, restAfter):
         self.name = name
+        self.sets = sets
         self.time = time
         self.restAfter = restAfter
-
         
 
         

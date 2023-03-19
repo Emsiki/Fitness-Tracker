@@ -1,4 +1,4 @@
-from exerciseClass import Exersice, Workout, Cycle
+import exerciseClass 
 #This file simply has all of the custom functions that I will be using 
 
 
@@ -100,11 +100,11 @@ def enterWorkoutData():
             regOrCustom = prompt("Would you like to make a custom workout routine, or choose from one of the many predefined workouts? (C or P): ", "CP", False)
 
             if regOrCustom == "C":
-            #here I would give help them generate an instace of the "Workout" Class
-                pass
+                choicesToGenerateCustom()
+                
 
             elif regOrCustom == "P":
-                choicesToGenerateCustom()
+                
                 pass
 
 
@@ -152,7 +152,7 @@ def prompt(inputs, preferedInputs, intr):
 
        while not checked:
             for num in inp: 
-                if num not in preferedInputs:
+                if num not in preferedInputs or num == "":
                     if ticker == 0:
                         print("Sorry, that is not a proper response")
                         prompts.append(prompt(inputs, preferedInputs, False))
@@ -168,7 +168,7 @@ def prompt(inputs, preferedInputs, intr):
        
         while not checked:
             for num in inp: 
-                if num in 'ABCDEFGHIJKLMNOPQRSTUVQXYZ-=_+/.,<>?;:':
+                if num in 'ABCDEFGHIJKLMNOPQRSTUVQXYZ-=_+/.,<>?;: ' or num == "":
                     if ticker == 0:
                         print("Sorry, that is not a proper response")
                     
@@ -185,7 +185,7 @@ def prompt(inputs, preferedInputs, intr):
          
         while not checked:
             for num in inp: 
-                if num in '1234567890-=_+/.,<>?;:':
+                if num in '1234567890-=_+/.,<>?;:' or num == "":
                     if ticker == 0:
 
                         print("Sorry, that is not a proper response")
@@ -207,44 +207,71 @@ def prompt(inputs, preferedInputs, intr):
 
 
 def choicesToGenerateCustom():
-    dayCount = prompt("How many days are in your workout cycle? (for ex. if you are doing push pull legs, you would have push day, pull day, leg day, and then a rest day until the cycle repeats itself): ", "", "Int")
+    dayCount = prompt("How many days are in your workout cycle, including rest days? (for ex. if you are doing push pull legs, you would have push day, pull day, leg day, and then a rest day until the cycle repeats itself): ", "", "Int")
     diffNum = prompt("Are the number of exercises in each day different? (Y or N): ", "YN", False)
+    Exersice1 = []
     Workout = []
     Cycle = []
+    WorkoutTemp = []
     if diffNum == "Y":
         for day in range(int(dayCount)):
-            restDay = prompt(f"Is day #{day + 1} your rest day? (Y or N): ", "YN", False)
+            restDay = prompt(f"Is day #{day + 1} a rest day? (Y or N): ", "YN", False)
             if restDay == "N":
-                numExer = prompt(f"How many exercises are in day #{day + 1} of your cycle?: ", "", "Int")
-                for i in range(int(dayCount)):
-                    dayName = prompt(f"What is the name of day #{i + 1}?: ", "", "String")      
-                    for j in range(int(numExer)):
-                        exerciseName = prompt(f"What is the name of workout #{j + 1} on {dayName} day: ", "", "String")
-                        exerciseTime = prompt("How much time does this exersice take (In seconds)?: ", "", "Int")
-                        exerciseRestAfter = prompt("How long do you rest for after this workout? (In seconds)?: ", "", "Int")
-                        Workout.append(Exersice(exerciseName, exerciseTime, exerciseRestAfter))
-
-                Cycle.append(Workout)
-                Workout = []
-
-
+                dayName = prompt(f"What is the name of day #{day + 1}?: ", "", "String")  
+                numExer = prompt(f"How many exercises are in {dayName} day : ", "", "Int")
+                    
+                for j in range(int(numExer)):
+                    exerciseName = prompt(f"What is the name of workout #{j + 1} on {dayName} day: ", "", "String")
+                    exerciseSets = prompt(f"How many sets do you do of {exerciseName}?: ", "", "Int")
+                    exerciseTime = prompt("How much time does each set of this exersice take not including rest time (In seconds) ?: ", "", "Int")
+                    exerciseRestAfter = prompt("How long do you rest for after each set of this workout? (In seconds)?: ", "", "Int")
+                    Exersice1.append(exerciseClass.Exersice(exerciseName, exerciseSets, exerciseTime, exerciseRestAfter))
+                    WorkoutTemp.append([exerciseName, exerciseSets, exerciseTime, exerciseRestAfter])
+                        
+                Workout.append(Workout)
+                Exersice1 = []
 
             else:   
                 Cycle.append("RestDay")
+                WorkoutTemp.append("RestDay")
+            
 
-    else:    
-        numExer = prompt("How many exercises are in there in each day of your cycle?", "", "Int")
-        for i in range(int(dayCount)):
-            dayName = prompt(f"What is the name of day #{i + 1}?: ", "", "String")      
-            for j in range(int(numExer)):
-                exerciseName = prompt(f"What is the name of workout #{j + 1} on {dayName} day: ", "", "String")
-                exerciseTime = prompt("How much time does this exersice take (In seconds)?: ", "", "Int")
-                exerciseRestAfter = prompt("How long do you rest for after this workout? (In seconds)?: ", "", "Int")
-                Workout.append(Exersice(exerciseName, exerciseTime, exerciseRestAfter))
 
             Cycle.append(Workout)
             Workout = []
+
+    else:    
+        numExer = prompt("How many exercises are in there in each day of your cycle?: ", "", "Int")
+        for i in range(int(dayCount)):
+            restDay = prompt(f"Is day #{i + 1} a rest day? (Y or N): ", "YN", False)
+            if restDay == "N":
+                dayName = prompt(f"What is the name of day #{i + 1}?: ", "", "String")      
+                for j in range(int(numExer)):
+                    exerciseName = prompt(f"What is the name of workout #{j + 1} on {dayName} day: ", "", "String")
+                    exerciseSets = prompt(f"How many sets do you do of {exerciseName}?: ", "", "Int")
+                    exerciseTime = prompt("How much time does each set of this exersice take not including rest time (In seconds)?: ", "", "Int")
+                    exerciseRestAfter = prompt("How long do you rest for after each set of this workout? (In seconds)?: ", "", "Int")
+                    Exersice1.append(exerciseClass.Exersice(exerciseName, exerciseSets, exerciseTime, exerciseRestAfter))
+                    WorkoutTemp.append([exerciseName, exerciseSets, exerciseTime, exerciseRestAfter])
+
+                Workout.append(Workout)
+                Exersice1 = []
+                
+            else:
+                Cycle.append("RestDay")
+                WorkoutTemp.append("RestDay")
+            
+            Cycle.append(Workout)
+            Workout = []
     
+
+#Example output of how it looks without making objects:
+#['RestDay', ['CHEST FLY', '3', '60', '60'], ['BENCH', '4', '45', '120'], ['TRI PULL DOWN', '4', '35', '100'], 
+# 'RestDay', ['LEG EXTENSIONS', '3', '120', '240'], ['LEG CURLS', '3', '140', '30'], ['CALF RAISES', '2', '45', '10']]
+    
+
+
+    print(Cycle)
     return Cycle
 
 
