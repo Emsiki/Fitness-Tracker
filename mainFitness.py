@@ -1,10 +1,16 @@
 
-import time as t
+import time
 import functions
 
 def main():
-    
-    choice = functions.choice()
+    openedBefore = open("collectedData.txt", "r")
+
+    if not openedBefore.read():
+        helpOrNot = functions.prompt("Welcome to   F i t n e s s T r a c k e r   your console based fitness tracker that you've always dreamed of, since this is your first time using this program, would you like instructions?", "YN", "")
+        #if helpOrNot == "Y":
+
+
+    choice = functions.prompt("Please choose one of the following actions:\n(E)nter your data for today\n(T)alk to a virtual assistant\n(S)ubmit your general statistics in the form of maxes\n(V)iew graphics based on past data\n(M)anually change the time\n(H)ard reset\n(R)ank:\n", "ETSVMHR", False)
 
     if choice == "V":
         functions.viewGraphics()

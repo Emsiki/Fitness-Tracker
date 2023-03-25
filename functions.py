@@ -47,32 +47,20 @@ def manualTime():
 
     return int(hour), int(minute)
 
-
-#Returns the players menu navigation choice in the form of a capital character 
-#Possible outputs include E, T, V, S, M
-#More can be added simply, just edit the while loops conditional to include more inputs and the first print statement to include more inputs
-def choice():
     
-    answer = prompt("Please choose one of the following actions:\n(E)nter your data for today\n(T)alk to a virtual assistant\n(S)ubmit your general statistics in the form of maxes\n(V)iew graphics based on past data\n(M)anually change the time\n(H)ard reset\n(R)ank:\n", "ETSVMHR", False)
-
-    return answer
-
 def enterWorkoutData():
     
+    collectedData = open("collectedData.txt", "r")
     
-    happendBefore = open("happendBefore.txt", "r")
 
-    if happendBefore.read() == "":
+    if collectedData.read() == "":
+        collectedData.close()
 
         print("Since this is your first time entering data, before I'm able to save your workout data, I need to know a few things, please answer these following questions")
         
         regOrCustom = prompt("Would you like to make a custom workout routine, or choose from one of the many predefined workouts? (C or P): ", "CP", False)
         
-        happendBefore = open("happendBefore.txt", "a")
-        happendBefore.write("True")
-
-        
-
+      
 
         if regOrCustom == "R":
             
@@ -81,11 +69,13 @@ def enterWorkoutData():
         elif regOrCustom == "C":
             
             
-            workout = open("collectedData.txt", "a")
+            collectedData = open("collectedData.txt", "a")
+            collectedData.close()
             #makes a custom workout, converts it to JSON and saves it
             workout.write(f"{json.dumps(choicesToGenerateCustom())}")
 
-            workout = open("collectedData.txt", "r")
+            collectedData = open("collectedData.txt", "r")
+            collectedData.close()
             print(type(json.loads(workout.read())))
 
 
@@ -132,11 +122,8 @@ def viewGraphics():
 
 def hardReset():
     workOutReset = open("collectedData.txt", "w")
-    happendBeforeReset = open("happendBefore.txt", "w")
-    workOutReset.write('')
-    happendBeforeReset.write('')
     workOutReset.close()
-    happendBeforeReset.close()
+    
 
 
 def rank():
@@ -156,13 +143,13 @@ def prompt(inputs, preferedInputs, intr):
     trigger = False
     ticker = 0
     inp = input(inputs)
-    inp = inp.upper()
+    inpCopy = inp.upper()
     prompts = []
     if preferedInputs:
 
        while not checked:
-            for num in inp: 
-                if num not in preferedInputs or num == "":
+            for num in inpCopy: 
+                if num not in preferedInputs or len(num) == 0:
                     if ticker == 0:
                         print("Sorry, that is not a proper response")
                         prompts.append(prompt(inputs, preferedInputs, False))
@@ -177,8 +164,8 @@ def prompt(inputs, preferedInputs, intr):
     elif intr == "Int":
        
         while not checked:
-            for num in inp: 
-                if num in 'ABCDEFGHIJKLMNOPQRSTUVQXYZ-=_+/.,<>?;: ' or num == "":
+            for num in inpCopy: 
+                if num in 'ABCDEFGHIJKLMNOPQRSTUVQXYZ-=_+/.,<>?;: ' or len(num) == 0:
                     if ticker == 0:
                         print("Sorry, that is not a proper response")
                     
@@ -194,8 +181,8 @@ def prompt(inputs, preferedInputs, intr):
     elif intr == "String":
          
         while not checked:
-            for num in inp: 
-                if num in '1234567890-=_+/.,<>?;:' or num == "":
+            for num in inpCopy: 
+                if num in '1234567890-=_+/.,<>?;:' or len(num) == 0:
                     if ticker == 0:
 
                         print("Sorry, that is not a proper response")
@@ -209,17 +196,17 @@ def prompt(inputs, preferedInputs, intr):
 
     if trigger:
         return prompts[-1]
-    else:
-        return inp
+    else: 
+        return inpCopy
  
     
 
-
+#The choicesToGenerateCustom function returns a custom workout in the form of a 2d array
 def choicesToGenerateCustom():
     dayCount = prompt("How many days are in your workout cycle, including rest days? (for ex. if you are doing push pull legs, you would have push day, pull day, leg day, and then a rest day until the cycle repeats itself): ", "", "Int")
     diffNum = prompt("Are the number of exercises in each day different? (Y or N): ", "YN", False)
     Exersice1 = []
-    Workout = []
+    
     Cycle = []
     if diffNum == "Y":
         for day in range(int(dayCount)):
@@ -233,7 +220,7 @@ def choicesToGenerateCustom():
                     exerciseSets = prompt(f"How many sets do you do of {exerciseName}?: ", "", "Int")
                     exerciseTime = prompt("How much time does each set of this exersice take not including rest time (In seconds) ?: ", "", "Int")
                     exerciseRestAfter = prompt("How long do you rest for after each set of this workout? (In seconds)?: ", "", "Int")
-                    #Exersice1.append(exerciseClass.Exersice(exerciseName, exerciseSets, exerciseTime, exerciseRestAfter))
+                    
                     Exersice1.append([exerciseName, exerciseSets, exerciseTime, exerciseRestAfter])
                         
                 Cycle.append(Exersice1)
@@ -254,7 +241,7 @@ def choicesToGenerateCustom():
                     exerciseSets = prompt(f"How many sets do you do of {exerciseName}?: ", "", "Int")
                     exerciseTime = prompt("How much time does each set of this exersice take not including rest time (In seconds)?: ", "", "Int")
                     exerciseRestAfter = prompt("How long do you rest for after each set of this workout? (In seconds)?: ", "", "Int")
-                    #Exersice1.append(exerciseClass.Exersice(exerciseName, exerciseSets, exerciseTime, exerciseRestAfter))
+                    
                     Exersice1.append([exerciseName, exerciseSets, exerciseTime, exerciseRestAfter])
                     
                 Cycle.append(Exersice1)
@@ -266,14 +253,8 @@ def choicesToGenerateCustom():
             
     
 
-#Example output
-#[[<exerciseClass.Exersice object at 0x00000139402D78E0>, <exerciseClass.Exersice object at 0x000001394036E5B0>, 
-# <exerciseClass.Exersice object at 0x000001394036E670>, <exerciseClass.Exersice object at 0x000001394036EC40>], 
-# 'RestDay', [<exerciseClass.Exersice object at 0x000001394036ED60>, <exerciseClass.Exersice object at 0x00000139404CF280>, 
-# <exerciseClass.Exersice object at 0x00000139404CF2E0>, <exerciseClass.Exersice object at 0x00000139404CF250>], 
-# [<exerciseClass.Exersice object at 0x000001394047BB20>, <exerciseClass.Exersice object at 0x000001394047B0A0>, 
-# <exerciseClass.Exersice object at 0x000001394047B130>, <exerciseClass.Exersice object at 0x000001394047B160>]]
 
+    
     return Cycle
 
 
