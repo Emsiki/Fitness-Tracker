@@ -250,16 +250,21 @@ def choicesToGenerateCustom():
             else:
                 Cycle.append("RestDay")
             
-            
-    
 
-
-    
     return Cycle
 
 
 def choicesToGenerateReg():
     pass
+
+
+
+def journal():
+    pass
+
+
+
+
 
 
 
